@@ -63,7 +63,7 @@ export default function Home() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 24px 16px;
+          padding: 24px 16px 56px;
         }
         .card {
           background: #141414;
