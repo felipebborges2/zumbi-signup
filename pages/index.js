@@ -54,7 +54,7 @@ export default function Home() {
         <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
       </Head>
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{__html: `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
           background: #0a0a0a;
@@ -102,6 +102,13 @@ export default function Home() {
           color: rgba(255,255,255,0.3);
           letter-spacing: 1.5px;
           text-transform: uppercase;
+        }
+        .logo {
+          width: 100px;
+          height: 100px;
+          object-fit: contain;
+          margin-bottom: 10px;
+          filter: drop-shadow(0 0 12px rgba(74,222,128,0.3));
         }
         .body { padding: 28px 32px 32px; }
         .tabs {
@@ -200,13 +207,14 @@ export default function Home() {
           margin-bottom: 16px;
           line-height: 1.6;
         }
-      `}</style>
+      `}} />
 
       <div className="card">
         <div className="header">
           <div className="tag">UFCSPA · Restaurante Universitário</div>
-          <div className="titulo">🧟 Zumbi dos Jantares</div>
-          <div className="subtitulo">Cardápio diário no seu e-mail</div>
+          <img src="/zumbi-logo.png" alt="Zumbi dos Jantares" className="logo" />
+          <div className="titulo">Zumbi dos Jantares</div>
+          <div className="subtitulo">Receba o cardápio diriamente no seu e-mail</div>
         </div>
 
         <div className="body">
@@ -221,7 +229,7 @@ export default function Home() {
               className={`tab ${modo === "descadastro" ? "ativo" : ""}`}
               onClick={() => { setModo("descadastro"); setStatus(null); }}
             >
-              ✌️ Me libertar
+              😞 Me libertar
             </button>
           </div>
 
@@ -231,7 +239,7 @@ export default function Home() {
               <input
                 className="input"
                 type="text"
-                placeholder="Como te chamamos antes de morrer?"
+                placeholder="Qual o seu nome?"
                 value={nome}
                 onChange={e => setNome(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleSubmit()}
@@ -272,7 +280,7 @@ export default function Home() {
                 onClick={handleSubmit}
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Processando..." : "✌️ Quero me libertar"}
+                {status === "loading" ? "Processando..." : "😞 Quero me libertar"}
               </button>
             </>
           )}
@@ -287,7 +295,7 @@ export default function Home() {
       </div>
 
       <div className="footer" style={{position:"fixed",bottom:"16px",left:0,right:0,textAlign:"center"}}>
-        Criado por Felipe Borges ·{" "}
+        Design and powered by Felipe Borges·{" "}
         <a href="https://github.com/felipebborges2" target="_blank" rel="noreferrer">
           github.com/felipebborges2
         </a>
