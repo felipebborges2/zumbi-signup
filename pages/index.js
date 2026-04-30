@@ -60,10 +60,15 @@ export default function Home() {
           background: #0a0a0a;
           font-family: 'Nunito', sans-serif;
           min-height: 100vh;
+          padding: 0;
+        }
+        .page {
+          min-height: 100vh;
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 24px 16px 56px;
+          padding: 24px 16px 0;
         }
         .card {
           background: #141414;
@@ -196,7 +201,7 @@ export default function Home() {
         .msg.loading { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid #222; }
         .footer {
           text-align: center;
-          margin-top: 20px;
+          padding: 20px 16px;
           font-size: 11px;
           color: rgba(255,255,255,0.15);
         }
@@ -209,6 +214,7 @@ export default function Home() {
         }
       `}} />
 
+      <div className="page">
       <div className="card">
         <div className="header">
           <div className="tag">UFCSPA · Restaurante Universitário</div>
@@ -294,11 +300,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="footer" style={{position:"fixed",bottom:"16px",left:0,right:0,textAlign:"center"}}>
+      <div className="footer">
         Designed and powered by Felipe Borges·{" "}
         <a href="https://github.com/felipebborges2" target="_blank" rel="noreferrer">
           github.com/felipebborges2
         </a>
+      </div>
       </div>
     </>
   );
