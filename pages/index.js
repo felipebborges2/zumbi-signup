@@ -295,7 +295,7 @@ export default function Home() {
       </div>
 
       <div className="footer" style={{position:"fixed",bottom:"16px",left:0,right:0,textAlign:"center"}}>
-        Design and powered by Felipe Borges·{" "}
+        Designed and powered by Felipe Borges·{" "}
         <a href="https://github.com/felipebborges2" target="_blank" rel="noreferrer">
           github.com/felipebborges2
         </a>
