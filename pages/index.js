@@ -258,7 +258,7 @@ export default function Home() {
                 onClick={handleSubmit}
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Invocando..." : "🧟 Quero ser assombrado(a)!"}
+                {status === "loading" ? "Invocando..." : "🧟 Quero estar na lista do zumbi!"}
               </button>
             </>
           ) : (
