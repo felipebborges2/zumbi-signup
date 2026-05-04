@@ -5,8 +5,10 @@ export default function Home() {
   const [modo, setModo] = useState("cadastro"); // "cadastro" | "descadastro"
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [telegram, setTelegram] = useState(false);
   const [status, setStatus] = useState(null); // null | "loading" | "success" | "error"
   const [mensagem, setMensagem] = useState("");
+  const [telegramLink, setTelegramLink] = useState(null);
 
   const handleSubmit = async () => {
     if (!email || !email.includes("@")) {
@@ -27,14 +29,16 @@ export default function Home() {
       const res = await fetch("/api/inscricao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, acao: modo }),
+        body: JSON.stringify({ nome, email, acao: modo, telegram }),
       });
       const data = await res.json();
       if (res.ok) {
         setStatus("success");
         setMensagem(data.mensagem);
+        setTelegramLink(data.telegramLink || null);
         setNome("");
         setEmail("");
+        setTelegram(false);
       } else {
         setStatus("error");
         setMensagem(data.mensagem || "Algo deu errado nas profundezas.");
@@ -199,6 +203,27 @@ export default function Home() {
         .msg.success { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
         .msg.error { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
         .msg.loading { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid #222; }
+        .telegram-box {
+          margin-top: 12px;
+          padding: 12px 16px;
+          background: rgba(41,182,246,0.08);
+          border: 1px solid rgba(41,182,246,0.25);
+          border-radius: 10px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #7dd3fc;
+          text-align: center;
+        }
+        .telegram-box a { color: #38bdf8; }
+        .checkbox-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 16px;
+          cursor: pointer;
+        }
+        .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4ade80; cursor: pointer; flex-shrink: 0; }
+        .checkbox-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.55); cursor: pointer; }
         .footer {
           text-align: center;
           padding: 20px 16px;
@@ -259,6 +284,14 @@ export default function Home() {
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleSubmit()}
               />
+              <label className="checkbox-row">
+                <input
+                  type="checkbox"
+                  checked={telegram}
+                  onChange={e => setTelegram(e.target.checked)}
+                />
+                <span className="checkbox-label">Também quero receber no Telegram ✈️</span>
+              </label>
               <button
                 className="btn"
                 onClick={handleSubmit}
@@ -296,6 +329,12 @@ export default function Home() {
           )}
           {status === "loading" && (
             <div className="msg loading">⏳ Consultando as profundezas...</div>
+          )}
+          {status === "success" && telegramLink && (
+            <div className="telegram-box">
+              Entre no canal do Telegram para receber o cardápio por lá também:<br />
+              <a href={telegramLink} target="_blank" rel="noreferrer">✈️ {telegramLink}</a>
+            </div>
           )}
         </div>
       </div>

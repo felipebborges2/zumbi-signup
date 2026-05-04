@@ -12,10 +12,12 @@ async function getSheetClient() {
   return google.sheets({ version: "v4", auth });
 }
 
+const TELEGRAM_CHANNEL_LINK = process.env.TELEGRAM_CHANNEL_LINK || "";
+
 async function getInscritos(sheets) {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A:D`,
+    range: `${SHEET_NAME}!A:E`,
   });
   return res.data.values || [];
 }
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ mensagem: "Método não permitido." });
   }
 
-  const { nome, email, acao } = req.body;
+  const { nome, email, acao, telegram } = req.body;
 
   if (!email || !email.includes("@")) {
     return res.status(400).json({ mensagem: "E-mail inválido." });
@@ -56,12 +58,13 @@ export default async function handler(req, res) {
           const rowNum = idxExistente + 2; // +1 header, +1 base-1
           await sheets.spreadsheets.values.update({
             spreadsheetId: SHEET_ID,
-            range: `${SHEET_NAME}!D${rowNum}`,
+            range: `${SHEET_NAME}!D${rowNum}:E${rowNum}`,
             valueInputOption: "RAW",
-            requestBody: { values: [["TRUE"]] },
+            requestBody: { values: [["TRUE", telegram ? "TRUE" : "FALSE"]] },
           });
           return res.status(200).json({
             mensagem: `Bem-vindo(a) de volta, ${dados[idxExistente][0]}! O Zumbi voltará a te assombrar. 🧟`,
+            telegramLink: telegram && TELEGRAM_CHANNEL_LINK ? TELEGRAM_CHANNEL_LINK : null,
           });
         }
       }
@@ -72,15 +75,16 @@ export default async function handler(req, res) {
       });
       await sheets.spreadsheets.values.append({
         spreadsheetId: SHEET_ID,
-        range: `${SHEET_NAME}!A:D`,
+        range: `${SHEET_NAME}!A:E`,
         valueInputOption: "RAW",
         requestBody: {
-          values: [[nome.trim(), emailLower, dataHoje, "TRUE"]],
+          values: [[nome.trim(), emailLower, dataHoje, "TRUE", telegram ? "TRUE" : "FALSE"]],
         },
       });
 
       return res.status(200).json({
         mensagem: `Pronto, ${nome.trim()}! Você será assombrado(a) todo dia útil às 9h. 🧟‍♂️`,
+        telegramLink: telegram && TELEGRAM_CHANNEL_LINK ? TELEGRAM_CHANNEL_LINK : null,
       });
     }
 
